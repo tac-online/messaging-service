@@ -1,0 +1,5 @@
+server:
+  maxThreads: 128
+
+logging:
+  level: WARN
