@@ -1,5 +1,8 @@
 server:
   maxThreads: 128
 
+discovery:
+  serviceName: tac-messaging
+
 logging:
   level: WARN
