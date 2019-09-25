@@ -1,17 +1,12 @@
 package de.johanneswirth.tac.messagingservice;
 
+import de.johanneswirth.tac.common.Utils;
 import io.dropwizard.Application;
-import io.dropwizard.client.HttpClientBuilder;
-import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.discovery.DiscoveryBundle;
 import io.dropwizard.discovery.DiscoveryFactory;
-import io.dropwizard.discovery.client.DiscoveryClient;
-import io.dropwizard.discovery.client.DiscoveryClientManager;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.websockets.WebsocketBundle;
-
-import javax.ws.rs.client.Client;
 
 public class MessagingServiceApp extends Application<MessagingConfiguration> {
 
@@ -34,8 +29,7 @@ public class MessagingServiceApp extends Application<MessagingConfiguration> {
 
     @Override
     public void run(MessagingConfiguration configuration, Environment environment) throws Exception {
+        Utils.init(configuration.getPublicKey());
         environment.jersey().register(MessagingService.class);
-        final DiscoveryClient discoveryClient = discoveryBundle.newDiscoveryClient("other-service");
-        environment.lifecycle().manage(new DiscoveryClientManager(discoveryClient));
     }
 }
