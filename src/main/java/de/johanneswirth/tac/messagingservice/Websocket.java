@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @ServerEndpoint(value="/public/websocket", encoders = ClientMessageEncoder.class)
@@ -32,12 +31,10 @@ public class Websocket {
 
     @OnMessage
     public void recvAuth(final Session session, String message) {
-        Optional<String> subject = Utils.validateJWT(message);
-        subject.ifPresent(s -> {
-            List<Session> sessions = connections.getOrDefault(subject.get(), new LinkedList<>());
-            connections.put(subject.get(), sessions);
-            sessions.add(session);
-        });
+        String subject = Utils.validateJWT(message).getSubject();
+        List<Session> sessions = connections.getOrDefault(subject, new LinkedList<>());
+        connections.put(subject, sessions);
+        sessions.add(session);
     }
 
     private void remove(Session session) {
